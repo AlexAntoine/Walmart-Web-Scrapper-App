@@ -5,21 +5,25 @@ exports.getLoginPage = async(req, res)=>{
 }
 
 exports.getDashboard = async(req, res)=>{
-
-    res.render('dashboard');
+    res.render('dashboard',{currentUser:req.user});
+    // res.render('dashboard');
 }
 
 exports.loginUser = async(req,res)=>{
-    const {email, password}=req.body;
+    try {
+        const {email, password}=req.body;
 
-    const user = await User.findByCredentials(email, password);
-
-    if(!user){
-        res.redirect('/');
+        const user = await User.findByCredentials(email, password);
+    
+        if(!user){
+            res.redirect('/');
+        }
+    
+        
+        res.redirect('/user/dashboard');
+    } catch (error) {
+        console.log(error);
     }
-
-    console.log(req)
-    // res.redirect('/user/dashboard');
 }
 
 exports.getSignupPage = async(req, res)=>{
@@ -27,16 +31,18 @@ exports.getSignupPage = async(req, res)=>{
 }
 
 exports.registerUser = async(req, res)=>{
-    const {username, email, password} = req.body;
+    
+    const newUser = await User.create(req.body);
 
-    const user = new User({
-        username:username,
-        email:email,
-        password:password
-    });
+    const token = await newUser.generateAuthToken();
 
-    const newUser = await user.save();
-    console.log(newUser);
+    await newUser.save();
 
-    res.redirect('/signup');
+    res.cookie('token',token,{
+        httpOnly:true
+    }); 
+    
+    res.redirect('/user/dashboard');
+
+
 }

@@ -4,11 +4,11 @@
 <head>
     <title>Walmart Scrapper App</title>
 
-    
-    <link rel="stylesheet" type="text/css" href="../stylesheets/design.css">
+   
     <link rel="stylesheet" type="text/css" href="../libs/bootstraps.css">
 
     <link href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/design.css">
 
     <!-- Bootstrap core JavaScript-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -17,7 +17,7 @@
     <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
-
+    
 </head>
 
 <body>
@@ -34,7 +34,7 @@
                 <ul class="navbar-nav mr-auto mr-0">
                     <% if(currentUser){ %>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="#"><%= currentUser.name %></b></a>
+                            <a class="nav-link text-white" href="#"><%= currentUser.username %></b></a>
                         </li>
     
                         <li class="nav-item">
@@ -45,15 +45,12 @@
                             <a class="nav-link text-white" href="/logout">Logout</a>
                         </li>
                     <% } %>
-                    
                 </ul>
             </div>
 
         </div>
     </nav>
-    <%if(currentUser) {%>
-        <div class="col-2">
-            <%- include('../partials/sidebar')-%>
-
+    <div class="col-2">
+        <%- include('../partials/sidebar')-%>
     </div>
-    <% } %>
+ 
