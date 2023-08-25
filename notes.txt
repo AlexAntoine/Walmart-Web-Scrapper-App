@@ -1,1 +1,8 @@
 Link to github - https://github.com/PrashantVIT1/Walmart-Scrapper-App/blob/main/views/partials/header.ejs
+
+    <%if(currentUser) {%>
+        <div class="col-2">
+            <%- include('../partials/sidebar')-%>
+
+    </div>
+    <% } %>
