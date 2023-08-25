@@ -181,3 +181,7 @@ body {
     top: 50%;
     font-size: 2rem;
 }
+
+.col-2{
+    padding-left: 0;
+}
