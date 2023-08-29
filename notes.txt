@@ -6,3 +6,11 @@ Link to github - https://github.com/PrashantVIT1/Walmart-Scrapper-App/blob/main/
 
     </div>
     <% } %>
+
+    <div class="container w-25 mt-2">
+    <%-include('../partials/messages')-%>
+  
+        <h1 class="text-center">Dashboard</h1>
+
+    
+</div>
