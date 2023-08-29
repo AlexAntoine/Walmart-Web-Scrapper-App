@@ -62,9 +62,16 @@ exports.registerUser = async(req, res)=>{
 }
 
 exports.addUser = async(req, res)=>{
-    
- console.log('hello world')
 
+    const newUser = new User({
+        ...req.body
+    });
+
+    await newUser.save();
+
+    req.flash('success_msg','Account Created Successfully!');
+
+    res.redirect('/register');
 
 }
 
