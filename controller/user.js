@@ -10,6 +10,11 @@ exports.getDashboard = async(req, res)=>{
     // res.render('dashboard');
 }
 
+exports.getAllusers = (req, res)=>{
+    
+    res.render('allusers',{users:[], currentUser:req.user});
+}
+
 exports.loginUser = async(req,res)=>{
     try {
         const {email, password}=req.body;
