@@ -201,3 +201,10 @@ body {
     bottom: 1400px;
     left: 280px;
 }
+
+.users-table{
+    position: relative;
+    bottom: 1430px;
+    width: 50%;
+    left:30%;
+}
