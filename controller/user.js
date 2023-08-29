@@ -1,6 +1,7 @@
 const User = require('../model/user');
 
 exports.getLoginPage = async(req, res)=>{
+    console.log(req);
     res.render('login');
 }
 
@@ -14,20 +15,28 @@ exports.loginUser = async(req,res)=>{
         const {email, password}=req.body;
 
         const user = await User.findByCredentials(email, password);
-    
-        if(!user){
-            res.redirect('/');
-        }
-    
-        
-        res.redirect('/user/dashboard');
+
+        const token = await user.generateAuthToken();
+
+        res.cookie('token', token,{
+            httpOnly:true
+        });
+
+        res.redirect('/dashboard');
     } catch (error) {
         console.log(error);
+        
+        res.redirect('/');
     }
 }
 
 exports.getSignupPage = async(req, res)=>{
     res.render('signup');
+}
+
+exports.getRegisterPage = (req, res)=>{
+
+    res.render('register',{currentUser:req.user});
 }
 
 exports.registerUser = async(req, res)=>{
@@ -42,7 +51,23 @@ exports.registerUser = async(req, res)=>{
         httpOnly:true
     }); 
     
-    res.redirect('/user/dashboard');
+    res.redirect('/dashboard');
 
 
+}
+
+exports.addUser = async(req, res)=>{
+    
+ console.log('hello world')
+
+
+}
+
+
+exports.logOut = (req, res)=>{
+
+    res.clearCookie('token');
+    res.session = null;
+
+    res.redirect('/');
 }
