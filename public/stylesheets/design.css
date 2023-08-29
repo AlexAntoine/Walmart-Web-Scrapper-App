@@ -185,3 +185,19 @@ body {
 .col-2{
     padding-left: 0;
 }
+
+/* Edit Made to CSS file */
+.dashboard{
+    display: flex;
+    position: relative;
+    bottom:1431px;
+    justify-content: center;
+}
+
+#register-container{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    bottom: 1400px;
+    left: 280px;
+}
