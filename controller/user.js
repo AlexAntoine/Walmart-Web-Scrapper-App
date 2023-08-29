@@ -1,18 +1,18 @@
 const User = require('../model/user');
 
 exports.getLoginPage = async(req, res)=>{
-    console.log(req);
+ 
     res.render('login');
 }
 
 exports.getDashboard = async(req, res)=>{
     res.render('dashboard',{currentUser:req.user});
-    // res.render('dashboard');
 }
 
-exports.getAllusers = (req, res)=>{
-    
-    res.render('allusers',{users:[], currentUser:req.user});
+exports.getAllusers = async(req, res)=>{
+    const users = await User.find();
+
+    res.render('allusers',{users:users, currentUser:req.user});
 }
 
 exports.loginUser = async(req,res)=>{
