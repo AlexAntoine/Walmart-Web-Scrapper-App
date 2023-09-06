@@ -1,5 +1,5 @@
 const User = require('../model/user');
-
+const {findUser, updateUser} = require('../utils/apiCalls');
 exports.getLoginPage = async(req, res)=>{
  
     res.render('login');
@@ -40,8 +40,30 @@ exports.getSignupPage = async(req, res)=>{
 }
 
 exports.getRegisterPage = (req, res)=>{
-
+ 
     res.render('register',{currentUser:req.user});
+}
+
+exports.getEditUserPage = async(req, res)=>{
+    const user = await findUser(req.params.id);
+    
+    res.render('editUser',{currentUser:user, user:user});
+}
+exports.updateUser = async(req, res)=>{
+    const user =  await User.findByIdAndUpdate(req.params.id,req.body);
+    
+    req.flash('success_msg','User successfully updated!');
+    res.redirect(`/edit/${req.params.id}`);
+}
+
+exports.deleteUser = async(req, res)=>{
+    const id = {_id:req.params.id}
+
+    await User.deleteOne(id);
+    
+    req.flash('success_msg', 'User was deleted successfully!');
+
+    res.redirect('/users/all')
 }
 
 exports.registerUser = async(req, res)=>{
