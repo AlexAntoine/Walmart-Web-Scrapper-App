@@ -68,32 +68,56 @@ exports.deleteUser = async(req, res)=>{
 
 exports.registerUser = async(req, res)=>{
     
-    const newUser = await User.create(req.body);
+    try {
+        const newUser = await User.create(req.body);
 
-    const token = await newUser.generateAuthToken();
+        const token = await newUser.generateAuthToken();
 
-    await newUser.save();
-
-    res.cookie('token',token,{
-        httpOnly:true
-    }); 
+        await newUser.save();
     
-    res.redirect('/dashboard');
-
-
+        res.cookie('token',token,{
+            httpOnly:true
+        }); 
+        
+        res.redirect('/dashboard');
+        
+    } catch (error) {
+        console.log('line 85 ', error.code);
+        
+        if(error.code === 11000){
+            req.flash('error_msg', 'This user already exist. Please enter and new username and email');
+            res.redirect('/signup');
+        }
+    }
+    
 }
 
 exports.addUser = async(req, res)=>{
 
-    const newUser = new User({
-        ...req.body
-    });
+    try {
+        const newUser = new User({
+            ...req.body
+        });
 
-    await newUser.save();
+        await newUser.save();
 
-    req.flash('success_msg','Account Created Successfully!');
+        req.flash('success_msg','Account Created Successfully!');
 
-    res.redirect('/register');
+        res.redirect('/register');
+
+    } catch (error) {
+        console.log('Error: ', error);
+
+        if(error.code === 11000){
+
+            req.flash('error_msg', 'This user already exist. Please enter and new username and email');
+           return res.redirect('/register');
+        }
+
+        req.flash('error_msg', 'Unable to preform intended action. Please try again.');
+        res.redirect('/register');
+    }
+ 
 
 }
 
