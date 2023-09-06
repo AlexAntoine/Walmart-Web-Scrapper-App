@@ -11,10 +11,6 @@ const auth = async(req, res, next)=>{
        
         const user = await User.findOne({id:decoded._id, 'tokens.token':token});
         
-        if(!user){
-            throw new Error('Something went wrong')
-        }
-
         req.token = token;
         req.user =user;
 
