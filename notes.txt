@@ -14,3 +14,35 @@ Link to github - https://github.com/PrashantVIT1/Walmart-Scrapper-App/blob/main/
 
     
 </div>
+
+
+
+/* Edit Made to CSS file */
+.dashboard{
+    display: flex;
+    position: relative;
+    bottom:1431px;
+    justify-content: center;
+}
+
+#register-container{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    bottom: 1400px;
+    left: 280px;
+}
+
+.users-table{
+    position: relative;
+    bottom: 1430px;
+    width: 50%;
+    left:30%;
+}
+.edit-user{
+    position: relative;
+    bottom: 1430px;
+    width: 50%;
+    left: 30%;
+
+}
