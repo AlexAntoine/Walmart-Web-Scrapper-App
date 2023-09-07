@@ -5,6 +5,11 @@ exports.getLoginPage = async(req, res)=>{
     res.render('login');
 }
 
+exports.getChangePasswordPage = async(req, res)=>{
+
+    res.render('changePassword',{currentUser:req.user});
+}
+
 exports.getDashboard = async(req, res)=>{
     res.render('dashboard',{currentUser:req.user});
 }
