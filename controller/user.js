@@ -38,6 +38,7 @@ exports.loginUser = async(req,res)=>{
     } catch (error) {
         console.log(error);
         
+        req.flash('error_msg','login failed. Please enter the correct credentials')
         res.redirect('/');
     }
 }
