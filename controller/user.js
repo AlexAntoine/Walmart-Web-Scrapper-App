@@ -1,5 +1,7 @@
 const User = require('../model/user');
-const {findUser, updateUser} = require('../utils/apiCalls');
+const {findUser} = require('../utils/apiCalls');
+const bcrypt = require('bcrypt');
+
 exports.getLoginPage = async(req, res)=>{
  
     res.render('login');
@@ -54,11 +56,67 @@ exports.getEditUserPage = async(req, res)=>{
     
     res.render('editUser',{currentUser:user, user:user});
 }
+
+exports.changePassword = async(req, res)=>{
+    const {password:formPassword, confirmpassword} = req.body;
+
+    try {
+
+        if(formPassword !== confirmpassword){
+
+            req.flash('error_msg','Passwords do not match. Please try again');
+            return req.redirect('/password/change');
+        }
+
+        //Get user hashed password
+        const {password} = await User.findById(req.user.id);
+
+        //compare user hashed password with new password from the form
+        const result = await bcrypt.compare(formPassword,password)
+
+        if(result){
+            req.flash('error_msg','Cannot use a previous password please enter a new password.');
+
+            return res.redirect('/password/change');
+        }
+        else{
+
+            //hash new password 
+            const newPassword = await bcrypt.hash(formPassword,8);
+          
+            //replace old password with new password
+            await User.updateOne({_id:req.user.id}, {$set:{
+                password: newPassword
+            }});
+
+            req.flash('success_msg', 'Password updated successfully');
+            res.redirect('/password/change');
+
+        }
+         
+    } catch (error) {
+        console.log('line 70: ',error);
+        req.flash('error_msg','Unable to perform action. Please try again');
+
+        res.redirect('/password/change');
+    }
+}
 exports.updateUser = async(req, res)=>{
-    const user =  await User.findByIdAndUpdate(req.params.id,req.body);
+
+    try {
+         await User.findByIdAndUpdate(req.params.id,req.body);
     
-    req.flash('success_msg','User successfully updated!');
-    res.redirect(`/edit/${req.params.id}`);
+        req.flash('success_msg','User successfully updated!');
+        res.redirect(`/edit/${req.params.id}`);
+
+    } catch (error) {
+        
+        console.log('users line 98: ', error);
+
+        req.flash('error_msg','unable able to update user. Please try again');
+        res.redirect(`/edit/${req.params.id}`);
+    }
+ 
 }
 
 exports.deleteUser = async(req, res)=>{
