@@ -214,3 +214,10 @@ body {
     width: 50%;
     left: 30%;
 }
+
+.change-password{
+    position: relative;
+    bottom: 1500px;
+    width: 50%;
+    left: 30%;
+}
