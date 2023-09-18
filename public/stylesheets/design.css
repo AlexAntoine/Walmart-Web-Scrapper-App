@@ -221,3 +221,17 @@ body {
     width: 50%;
     left: 30%;
 }
+
+.new-product{
+    position: relative;
+    bottom: 90em;
+    /* bottom:1450px; */
+    left:400px;
+}
+
+.search-container{
+    max-width: 45%;
+    position: absolute;
+    top: 10em;
+    right: 28em;
+}
