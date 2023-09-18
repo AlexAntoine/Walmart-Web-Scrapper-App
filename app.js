@@ -13,6 +13,7 @@ const app = express();
 
 //Routes
 const loginRoute = require('./routes/route.js');
+const adminRoute  = require('./routes/admin');
 
 localDb();
 
@@ -42,7 +43,7 @@ app.use((req, res,next)=>{
 });
 
 app.use(loginRoute);
-
+app.use(adminRoute);
 
 
 
