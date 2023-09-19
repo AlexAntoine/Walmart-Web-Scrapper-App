@@ -225,7 +225,6 @@ body {
 .new-product{
     position: relative;
     bottom: 90em;
-    /* bottom:1450px; */
     left:400px;
 }
 
@@ -234,4 +233,11 @@ body {
     position: absolute;
     top: 10em;
     right: 28em;
+}
+
+.instock-container{
+    width: 50%;
+    position: absolute;
+    top: 10em;
+    right: 20em;
 }
