@@ -36,6 +36,15 @@ exports.getNewProductPage = async(req, res)=>{
    
 }
 
+exports.getInstockPage = async(req, res)=>{
+    
+    const products = await Product.find({newstock:'In Stock'})
+    // console.log('line 43: ', product);
+    res.render('../admin/instock',{currentUser:req.user, products})
+}
+
+
+
 exports.saveNewProduct = async(req, res)=>{
     const {url, title,price,stock,sku} = req.body;
 
@@ -60,19 +69,17 @@ exports.saveNewProduct = async(req, res)=>{
     await Product.create(newProduct);
 
     req.flash('success_msg','Product successfully added to database');
-    res.redirect('/product/new ')
+    res.redirect('/product/new')
 
 
 }
 exports.getSearchPage = async(req, res)=>{
-    //Need to working on this 
     const userSku = req.query.sku;
-    console.log('line 69: ',userSku);
     
     if(userSku)
     {
         const foundProduct = await Product.findOne({sku:userSku});
-        console.log('line 74: ', foundProduct);
+
         if(!foundProduct){
             req.flash('error_msg','Product does not exist in the database');
             return res.redirect('/product/search')
@@ -84,8 +91,20 @@ exports.getSearchPage = async(req, res)=>{
     res.render('../admin/search',{productData:'', currentUser:req.user})
 }
 
-exports.getProduct = async(req, res)=>{
+exports.deleteProduct = async(req, res)=>{
+    const id = {_id:req.params.id};
 
+    try{
+         await Product.deleteOne(id);
+    
+        req.flash('success_msg','Product deleted successfully');
+        res.redirect('/products/instock');
+        
+    }catch(error){
+        
+        console.log(error);
+        req.flash('error_msg','Unable to delete product')
+    }
 
 }
 
