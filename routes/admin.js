@@ -1,9 +1,11 @@
 const express = require('express');
 
 const auth = require('../middleware/auth');
-const {getNewProductPage, saveNewProduct, getSearchPage, getInstockPage, deleteProduct,priceChanged, deleteProdPriceChange, getOutOfStockPage, getBackInStockPage} = require('../controller/admin');
+const {getNewProductPage, getDashboard, saveNewProduct, getSearchPage, getInstockPage, deleteProduct,priceChanged, deleteProdPriceChange, getOutOfStockPage, getBackInStockPage} = require('../controller/admin');
 
 const router = express.Router();
+
+router.route('/dashboard').get(auth,getDashboard);
 
 router.route('/product/new').get(auth,getNewProductPage).post(auth, saveNewProduct);
 router.route('/product/search').get(auth,getSearchPage);

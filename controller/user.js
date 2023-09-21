@@ -12,10 +12,6 @@ exports.getChangePasswordPage = async(req, res)=>{
     res.render('changePassword',{currentUser:req.user});
 }
 
-exports.getDashboard = async(req, res)=>{
-    res.render('dashboard',{currentUser:req.user});
-}
-
 exports.getAllusers = async(req, res)=>{
     const users = await User.find();
 

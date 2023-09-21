@@ -1,6 +1,5 @@
 const Product = require('../model/product');
 const puppeteer = require('puppeteer');
-const cheerio = require('cheerio');
 const {samsClubApiCall} = require('../utils/apiCalls');
 
 exports.getNewProductPage = async(req, res)=>{
@@ -34,6 +33,12 @@ exports.getNewProductPage = async(req, res)=>{
         res.render('../admin/newProduct',{productData:productData,currentUser:req.user});
     }
    
+}
+
+exports.getDashboard = async(req, res)=>{
+    const products = await Product.find();
+
+    res.render('../admin/dashboard',{products,currentUser:req.user});
 }
 
 exports.priceChanged = async(req, res)=>{
