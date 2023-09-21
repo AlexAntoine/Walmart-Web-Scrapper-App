@@ -49,6 +49,13 @@ exports.getInstockPage = async(req, res)=>{
     res.render('../admin/instock',{currentUser:req.user, products})
 }
 
+exports.getOutOfStockPage = async(req, res)=>{
+    
+    const products = await Product.find({newstock:'Out of Stock'})
+    
+    res.render('../admin/outofstock',{currentUser:req.user, products})
+}
+
 exports.saveNewProduct = async(req, res)=>{
     const {url, title,price,stock,sku} = req.body;
 
@@ -58,6 +65,8 @@ exports.saveNewProduct = async(req, res)=>{
         stock,
         oldprice:price,
         newprice:price,
+        oldstock:stock,
+        newstock:stock,
         company:'Sam club',
         updatestatus:"Updated"
     }
@@ -94,6 +103,28 @@ exports.getSearchPage = async(req, res)=>{
     }
 
     res.render('../admin/search',{productData:'', currentUser:req.user})
+}
+
+exports.getBackInStockPage = async(req, res)=>{ 
+
+    try{
+
+        const backinstock = await Product.find({$and:[{oldstock:'Out of Stock'},{newstock:'In Stock'}]});
+
+        if(backinstock){
+
+            return res.render('../admin/backinstock', {currentUser:req.user, products:backinstock});
+        }
+        res.render('../admin/backinstock', {currentUser:req.user, products:[]});
+
+    }catch(error){
+        console.log(error);
+
+        req.flash('error_msg','Something went wrong');
+
+        res.redirect('/dashboard');
+    }
+    
 }
 
 exports.deleteProduct = async(req, res)=>{
