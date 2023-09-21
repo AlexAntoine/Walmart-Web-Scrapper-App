@@ -235,14 +235,7 @@ body {
     right: 28em;
 }
 
-.instock-container{
-    width: 50%;
-    position: absolute;
-    top: 10em;
-    right: 20em;
-}
-
-.price-changed{
+.price-changed, .out-of-stock,.instock-container, .back-in-stock{
     width: 50%;
     position: absolute;
     top: 10em;
