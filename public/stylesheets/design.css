@@ -241,3 +241,10 @@ body {
     top: 10em;
     right: 20em;
 }
+
+.price-changed{
+    width: 50%;
+    position: absolute;
+    top: 10em;
+    right: 20em;
+}
