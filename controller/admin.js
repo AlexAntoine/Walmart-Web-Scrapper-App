@@ -1,7 +1,7 @@
-const express = require('express');
 const Product = require('../model/product');
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
+const {samsClubApiCall} = require('../utils/apiCalls');
 
 exports.getNewProductPage = async(req, res)=>{
     const url = req.query.search;
@@ -10,8 +10,8 @@ exports.getNewProductPage = async(req, res)=>{
         const browser = await puppeteer.launch({headless:false});
         const page = await browser.newPage();
 
-        const result = await scrapeData(url, page);
-        // console.log(result);
+        const result = await samsClubApiCall(url, page);
+
         let productData = {
             title:result.title,
             price:`$${result.price}`,
@@ -36,14 +36,18 @@ exports.getNewProductPage = async(req, res)=>{
    
 }
 
+exports.priceChanged = async(req, res)=>{
+    const products = await Product.find()
+    
+    res.render('../admin/pricechanged',{products:products,currentUser:req.user})
+}
+
 exports.getInstockPage = async(req, res)=>{
     
     const products = await Product.find({newstock:'In Stock'})
-    // console.log('line 43: ', product);
+    
     res.render('../admin/instock',{currentUser:req.user, products})
 }
-
-
 
 exports.saveNewProduct = async(req, res)=>{
     const {url, title,price,stock,sku} = req.body;
@@ -51,8 +55,9 @@ exports.saveNewProduct = async(req, res)=>{
     const newProduct = {
         ...req.body,
         price:price,
-        newstock:stock,
-        oldstock:stock,
+        stock,
+        oldprice:price,
+        newprice:price,
         company:'Sam club',
         updatestatus:"Updated"
     }
@@ -79,7 +84,7 @@ exports.getSearchPage = async(req, res)=>{
     if(userSku)
     {
         const foundProduct = await Product.findOne({sku:userSku});
-
+       
         if(!foundProduct){
             req.flash('error_msg','Product does not exist in the database');
             return res.redirect('/product/search')
@@ -108,33 +113,12 @@ exports.deleteProduct = async(req, res)=>{
 
 }
 
-const scrapeData = async(url, page)=>{
-    let price = '';
-    try {
-        await page.goto(url,{waitUntil:'load', timeout:0});
+// Delete Prod Price Change
+exports.deleteProdPriceChange = async(req, res)=>{
 
-        const html = await page.evaluate(()=> document.body.innerHTML);
+    const id = {_id:req.params.id};
 
-        const $ = await cheerio.load(html);
+    const result = await Product.deleteOne(id);
 
-        const title = $('#main > div > div > div.sc-pc-large-desktop-product-card > div > div.sc-pc-large-desktop-layout-columns > div.sc-pc-large-desktop-layout-content > div.sc-pc-title-full-desktop > h1').text();
-        const dollar = $('#main > div > div > div.sc-pc-large-desktop-product-card > div > div.sc-pc-large-desktop-layout-columns > div.sc-pc-large-desktop-layout-content > div.sc-pc-channel-price > div > span.sc-price > span > span.Price-characteristic').text();
-        const cents = $('#main > div > div > div.sc-pc-large-desktop-product-card > div > div.sc-pc-large-desktop-layout-columns > div.sc-pc-large-desktop-layout-content > div.sc-pc-channel-price > div > span.sc-price > span > span.Price-mantissa').text();
-        const sku = $('#main > div > div > div.sc-pc-large-desktop-product-card > div > div.sc-pc-large-desktop-layout-columns > div.sc-pc-large-desktop-layout-content > div.sc-pc-title-full-desktop > div > div > div.sc-product-header-item-number').text();
-        const stock = 'In Stock';
-        price = `${dollar}.${cents}`
-
-        console.log('line 54: ',title);
-        return {
-            title,
-            price,
-            url,
-            sku,
-            stock
-        }
-    } catch (error) {
-        console.log(error);
-
-    
-    }
+    res.redirect('/products/pricechanged')
 }
