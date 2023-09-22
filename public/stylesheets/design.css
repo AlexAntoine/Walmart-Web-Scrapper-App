@@ -235,7 +235,7 @@ body {
     right: 28em;
 }
 
-.price-changed,.out-of-stock,.instock-container, .back-in-stock{
+.price-changed,.updated, .not-updated,.out-of-stock,.instock-container, .back-in-stock{
     width: 50%;
     position: absolute;
     top: 10em;
