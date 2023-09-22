@@ -35,6 +35,19 @@ exports.getNewProductPage = async(req, res)=>{
    
 }
 
+exports.getUpdated = async(req, res)=>{
+
+    const products = await Product.find({updatestatus:'Updated'})
+
+    res.render('../admin/updatedproducts',{currentUser:req.user,products})
+}
+
+exports.getNotUpdated = async(req, res)=>{
+     const products = await Product.find({updatestatus:'Not Updated'})
+    
+    res.render('../admin/notupdatedproducts',{currentUser:req.user,products});
+}
+
 exports.getDashboard = async(req, res)=>{
     const products = await Product.find();
 
